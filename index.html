@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Anime List</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="index.css" />
+  </head>
+
+  <body>
+    <!-- Loader Overlay -->
+    <div class="loader-overlay">
+      <div class="loader"></div>
+    </div>
+
+    <!-- Scroll Container for Locomotive Scroll -->
+    <div>
+      <div id="content">
+        <!-- Header -->
+        <header>
+          <h1>My Anime List</h1>
+        </header>
+
+        <!-- Form Section -->
+        <section class="form-section" data-scroll>
+          <form id="add-anime-form">
+            <label for="anime-name">Anime Name</label>
+            <input type="text" id="anime-name" placeholder="Enter anime name" />
+            <button type="submit">Add Anime</button>
+          </form>
+        </section>
+
+        <!-- Planning to Watch Section -->
+        <section id="planning-anime" class="anime-list" data-scroll>
+          <h2>Planning to Watch</h2>
+          <div class="anime-container">
+            <!-- Dynamic Anime Cards will be inserted here by JavaScript -->
+          </div>
+        </section>
+
+        <!-- Watched Section -->
+        <section id="watched-anime" class="anime-list">
+          <h2>Watched</h2>
+          <div class="anime-container">
+            <!-- Dynamic Anime Cards will be inserted here by JavaScript -->
+          </div>
+        </section>
+
+        <!-- My Best Choice Section -->
+        <section id="fav-anime" class="anime-list" data-scroll>
+          <h2>My Best Choice</h2>
+          <div class="anime-container">
+            <!-- Dynamic Best Choice Anime Cards will be inserted here by JavaScript -->
+            <p>Feature will coming soon stay tuned..........</p>
+          </div>
+        </section>
+
+        <footer>
+          <p>&copy Soumojit Banerjee</p>
+        </footer>
+      </div>
+    </div>
+
+    <!-- Custom Scripts -->
+    <script src="app.js"></script>
+  </body>
+</html>
