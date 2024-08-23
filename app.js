@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const addAnimeInput = document.getElementById("anime-name");
   const loaderOverlay = document.querySelector(".loader-overlay");
 
-  const API_BASE_URL = "https://anime-list-backend-g6geleo5h-soumojit08s-projects.vercel.app"; // Your backend URL
+  const API_BASE_URL = "https://backend-r7p97kobr-soumojit08s-projects.vercel.app"; // Your backend URL
 
   function showLoader() {
     loaderOverlay.style.display = "flex";
