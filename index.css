@@ -76,11 +76,11 @@ header h1 {
 
 .form-section {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 40px;
   position: relative; /* Necessary for positioning the dropdown */
+  flex-direction: column; /* Stack the form and dropdown */
 }
 
 #add-anime-form {
@@ -88,6 +88,13 @@ header h1 {
   display: flex;
   align-items: center;
   gap: 30px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column; /* Stack the input and button */
+  align-items: center; 
+  gap: 15px;
 }
 
 #add-anime-form label {
@@ -128,7 +135,6 @@ header h1 {
   background-color: #0056b3;
 }
 
-/* Style the dropdown container */
 .search-dropdown {
   position: absolute; /* Position relative to the form */
   top: 100%; /* Position below the input */
@@ -155,7 +161,6 @@ header h1 {
   background-color: #333; /* Darker background on hover */
 }
 
-/* Show the dropdown when the input is focused */
 .form-section #anime-name:focus + .search-dropdown { 
   display: block; /* Show the dropdown when the input is focused */
 }
