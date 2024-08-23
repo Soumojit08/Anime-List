@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const addAnimeInput = document.getElementById("anime-name");
   const loaderOverlay = document.querySelector(".loader-overlay");
 
-  const API_BASE_URL = "https://anime-list-backend-ruul.onrender.com"; // Your backend URL
+  const API_BASE_URL = "https://anime-list-backend-qhox.onrender.com"; // Your backend URL
 
   function showLoader() {
     loaderOverlay.style.display = "flex";
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", function () {
   async function loadAnimeData() {
     showLoader();
     try {
-      const response = await fetch(`${API_BASE_URL}/anime`); 
+      const response = await fetch(`${API_BASE_URL}/anime`);
       await new Promise((resolve) => setTimeout(resolve, 2000)); // Mock loader delay
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
     try {
       const response = await fetch(
         `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(title)}&limit=10`
-      );
+      ); // Increased limit to 10
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -66,20 +66,120 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  // This function is now simplified as it only handles the display
-  // The actual adding of the anime is handled by the backend
-  async function displayAnime(anime, section) {
+  async function addAnimeToDB(anime) {
+    try {
+      const response = await fetch(`${API_BASE_URL}/anime`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          title: anime.title,
+          imgSrc: anime.images.jpg.image_url,
+          status: "Planning",
+        }),
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return await response.json();
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async function moveToWatched(anime, animeCard) {
+    showLoader();
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/anime/${anime._id}/watched`,
+        { method: "PUT" }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const updatedAnime = await response.json();
+      animeCard.remove();
+      displayAnime(updatedAnime, watchedSection);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      hideLoader();
+    }
+  }
+
+  async function deleteAnime(animeCard) {
+    const animeId = animeCard.dataset.animeId;
+
+    if (!animeId) {
+      console.error("Anime ID is undefined");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/anime/${animeId}`, {
+        method: "DELETE",
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      animeCard.remove();
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  function displayAnime(anime, section) {
     const animeCard = document.createElement("div");
     animeCard.classList.add("anime-card");
-    animeCard.dataset.animeId = anime._id; // Fetching the id from the data
+    animeCard.dataset.animeId = anime._id;
     animeCard.innerHTML = `
         <img src="${anime.imgSrc}" alt="${anime.title}">
         <span>${anime.title}</span>
       `;
 
-    // ... (Rest of the displayAnime function) 
+    const iconContainer = document.createElement("div");
+    iconContainer.classList.add("icon-container");
+    animeCard.appendChild(iconContainer);
+
+    if (section === planningSection) {
+      const plusIcon = document.createElement("span");
+      plusIcon.innerHTML = `<i class="fa-solid fa-plus"></i>`;
+      plusIcon.style.cursor = "pointer";
+      plusIcon.addEventListener("click", () => moveToWatched(anime, animeCard));
+      iconContainer.appendChild(plusIcon);
+    }
+
+    if (section === watchedSection || section === planningSection) {
+      const trashBinIcon = document.createElement("span");
+      trashBinIcon.innerHTML = `<i class="fa-solid fa-trash"></i>`;
+      trashBinIcon.style.cursor = "pointer";
+      trashBinIcon.addEventListener("click", () => deleteAnime(animeCard));
+      iconContainer.appendChild(trashBinIcon);
+    }
+
+    if (section === watchedSection) {
+      const starIcon = document.createElement("span");
+      starIcon.innerHTML = `<i class="fa-regular fa-star"></i>`;
+      starIcon.style.cursor = "pointer";
+      starIcon.addEventListener("click", () => {
+        starIcon.innerHTML = `<i class="fa-solid fa-star"></i>`;
+        addToBestAnime(anime);
+      });
+      iconContainer.appendChild(starIcon);
+    }
 
     section.querySelector(".anime-container").appendChild(animeCard);
+  }
+
+  function addToBestAnime(anime) {
+    // Check if anime is already in Best Choice section
+    const existingAnime = favAnimeSection.querySelector(
+      `[data-anime-id="${anime._id}"]`
+    );
+    if (!existingAnime) {
+      displayAnime(anime, favAnimeSection);
+    } else {
+      alert("This anime is already in your Best Choice section.");
+    }
   }
 
   // Function to display search results (you'll need to create a modal or dropdown)
