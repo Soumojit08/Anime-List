@@ -76,9 +76,11 @@ header h1 {
 
 .form-section {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 40px;
+  position: relative; /* Necessary for positioning the dropdown */
 }
 
 #add-anime-form {
@@ -154,7 +156,7 @@ header h1 {
 }
 
 /* Show the dropdown when the input is focused */
-#anime-name:focus + .search-dropdown { 
+.form-section #anime-name:focus + .search-dropdown { 
   display: block; /* Show the dropdown when the input is focused */
 }
 
