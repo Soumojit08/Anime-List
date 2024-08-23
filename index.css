@@ -154,7 +154,7 @@ header h1 {
 }
 
 /* Show the dropdown when the input is focused */
-#anime-name:focus ~ .search-dropdown { /* Use general sibling combinator (~) */
+#anime-name:focus + .search-dropdown { 
   display: block; /* Show the dropdown when the input is focused */
 }
 
