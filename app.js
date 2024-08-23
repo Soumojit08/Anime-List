@@ -185,10 +185,6 @@ document.addEventListener("DOMContentLoaded", function () {
   // Function to display search results (you'll need to create a modal or dropdown)
   function displaySearchResults(animeData) {
     const dropdown = document.createElement("div");
-    const existingDropdown = document.querySelector(".search-dropdown");
-    if (existingDropdown) {
-    existingDropdown.remove();
-    }
     dropdown.classList.add("search-dropdown");
     animeData.forEach((anime) => {
       const option = document.createElement("div");
