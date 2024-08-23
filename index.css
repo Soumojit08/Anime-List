@@ -88,6 +88,7 @@ header h1 {
   display: flex;
   align-items: center;
   gap: 30px;
+  width: 100%;
 }
 
 .input-container {
@@ -161,7 +162,7 @@ header h1 {
   background-color: #333; /* Darker background on hover */
 }
 
-.form-section #anime-name:focus + .search-dropdown { 
+#add-anime-form #anime-name:focus + .search-dropdown { 
   display: block; /* Show the dropdown when the input is focused */
 }
 
