@@ -183,15 +183,28 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Function to display search results (you'll need to create a modal or dropdown)
-  function displaySearchResults(animeData) {
-    const dropdown = document.createElement("div");
-    dropdown.classList.add("search-dropdown");
-    animeData.forEach((anime) => {
-      const option = document.createElement("div");
-      option.classList.add("search-option");
-      option.textContent = anime.title;
-      option.addEventListener("click", async () => {
-        // Handle the selection (e.g., add anime to list)
+function displaySearchResults(animeData) {
+  // Remove any existing dropdown to avoid stacking multiple dropdowns
+  const existingDropdown = document.querySelector(".search-dropdown");
+  if (existingDropdown) {
+    existingDropdown.remove();
+  }
+
+  // Create a new dropdown for search results
+  const dropdown = document.createElement("div");
+  dropdown.classList.add("search-dropdown");
+
+  // Loop through the anime data and create an option for each result
+  animeData.forEach((anime) => {
+    const option = document.createElement("div");
+    option.classList.add("search-option");
+    option.textContent = anime.title;
+    option.style.cursor = "pointer";
+
+    // Handle click event for each search option
+    option.addEventListener("click", async () => {
+      try {
+        // Add selected anime to the database
         const response = await fetch(`${API_BASE_URL}/anime`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -201,21 +214,28 @@ document.addEventListener("DOMContentLoaded", function () {
             status: "Planning",
           }),
         });
+
+        // If the anime is added successfully, display it in the Planning section
         if (response.ok) {
           const addedAnime = await response.json();
-          displayAnime(addedAnime, planningSection); // Display the added anime
-          addAnimeInput.value = "";
-          // Close the dropdown
-          dropdown.remove();
+          displayAnime(addedAnime, planningSection);
+          addAnimeInput.value = "";  // Clear input after selection
+          dropdown.remove();  // Close the dropdown
         } else {
           handleError(new Error("Failed to add anime"));
         }
-      });
-      dropdown.appendChild(option);
+      } catch (error) {
+        handleError(error);
+      }
     });
-    // Append the dropdown to the body or where you want it
-     document.querySelector(".form-section").appendChild(dropdown);
-  }
+
+    // Append each option to the dropdown
+    dropdown.appendChild(option);
+  });
+
+  // Append the dropdown to the input's parent to ensure proper positioning
+  addAnimeInput.parentNode.appendChild(dropdown);
+}
 
   addAnimeForm.addEventListener("submit", async (e) => {
     e.preventDefault();
