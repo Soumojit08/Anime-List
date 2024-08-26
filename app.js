@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
   async function searchAnime(title) {
     try {
       const response = await fetch(
-        `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(title)}&limit=10`
+        `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(title)}&limit=10&language=en`
       ); // Increased limit to 10
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
